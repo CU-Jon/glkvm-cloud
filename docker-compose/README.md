@@ -19,6 +19,19 @@
    - `TURN_USER` / `TURN_PASS`: coturn authentication credentials (leave empty to use the default)
    - `GLKVM_ACCESS_IP`: glkvm cloud access address (leave empty to auto-detect at startup)
 
+   **LDAP Authentication (Optional):**
+   
+   - `LDAP_ENABLED`: set to `true` to enable LDAP authentication (default: `false`)
+   - `LDAP_SERVER`: LDAP server hostname or IP address
+   - `LDAP_PORT`: LDAP server port (default: `389`, for TLS use `636`)
+   - `LDAP_USE_TLS`: set to `true` to enable TLS encryption (default: `false`)
+   - `LDAP_BIND_DN`: service account distinguished name
+   - `LDAP_BIND_PASSWORD`: service account password
+   - `LDAP_BASE_DN`: search base for user queries
+   - `LDAP_USER_FILTER`: LDAP query filter (default: `(uid=%s)`)
+   - `LDAP_ALLOWED_GROUPS`: comma-separated list of authorized groups (optional)
+   - `LDAP_ALLOWED_USERS`: comma-separated list of authorized users (optional)
+
    ⚠️ **Note:** All configuration should be done in the `.env` file.
     You don’t need to modify `docker-compose.yml`, templates, or scripts directly.
 
