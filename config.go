@@ -26,6 +26,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/kylelemons/go-gypsy/yaml"
@@ -51,6 +52,17 @@ type Config struct {
 	WebrtcPort           string
 	WebrtcUsername       string
 	WebrtcPassword       string
+	// LDAP配置 (LDAP Configuration)
+	LdapEnabled          bool
+	LdapServer           string
+	LdapPort             int
+	LdapUseTLS           bool
+	LdapBindDN           string
+	LdapBindPassword     string
+	LdapBaseDN           string
+	LdapUserFilter       string
+	LdapAllowedGroups    string
+	LdapAllowedUsers     string
 }
 
 // docker mode fixed path for reading certificate
@@ -88,6 +100,18 @@ func (cfg *Config) Parse(c *cli.Command) error {
 	getFlagOpt(c, "webrtc-port", &cfg.WebrtcPort)
 	getFlagOpt(c, "webrtc-username", &cfg.WebrtcUsername)
 	getFlagOpt(c, "webrtc-password", &cfg.WebrtcPassword)
+
+	// LDAP配置标志 (LDAP Configuration flags)
+	getFlagOpt(c, "ldap-enabled", &cfg.LdapEnabled)
+	getFlagOpt(c, "ldap-server", &cfg.LdapServer)
+	getFlagOpt(c, "ldap-port", &cfg.LdapPort)
+	getFlagOpt(c, "ldap-use-tls", &cfg.LdapUseTLS)
+	getFlagOpt(c, "ldap-bind-dn", &cfg.LdapBindDN)
+	getFlagOpt(c, "ldap-bind-password", &cfg.LdapBindPassword)
+	getFlagOpt(c, "ldap-base-dn", &cfg.LdapBaseDN)
+	getFlagOpt(c, "ldap-user-filter", &cfg.LdapUserFilter)
+	getFlagOpt(c, "ldap-allowed-groups", &cfg.LdapAllowedGroups)
+	getFlagOpt(c, "ldap-allowed-users", &cfg.LdapAllowedUsers)
 
 	return nil
 }
@@ -131,6 +155,27 @@ func parseYamlCfg(cfg *Config, conf string) error {
 	getConfigOpt(yamlCfg, "webrtc-port", &cfg.WebrtcPort)
 	getConfigOpt(yamlCfg, "webrtc-username", &cfg.WebrtcUsername)
 	getConfigOpt(yamlCfg, "webrtc-password", &cfg.WebrtcPassword)
+
+	// LDAP配置 (LDAP Configuration)
+	getConfigOpt(yamlCfg, "ldap-enabled", &cfg.LdapEnabled)
+	getConfigOpt(yamlCfg, "ldap-server", &cfg.LdapServer)
+	getConfigOpt(yamlCfg, "ldap-port", &cfg.LdapPort)
+	getConfigOpt(yamlCfg, "ldap-use-tls", &cfg.LdapUseTLS)
+	getConfigOpt(yamlCfg, "ldap-bind-dn", &cfg.LdapBindDN)
+	// 注意：为了避免特殊字符解析问题和提高安全性，ldap-bind-password故意不从YAML读取
+	// Note: ldap-bind-password is intentionally not read from YAML to avoid special character parsing issues and for security.
+	// It's always read directly from the LDAP_BIND_PASSWORD environment variable below
+	getConfigOpt(yamlCfg, "ldap-base-dn", &cfg.LdapBaseDN)
+	getConfigOpt(yamlCfg, "ldap-user-filter", &cfg.LdapUserFilter)
+	getConfigOpt(yamlCfg, "ldap-allowed-groups", &cfg.LdapAllowedGroups)
+	getConfigOpt(yamlCfg, "ldap-allowed-users", &cfg.LdapAllowedUsers)
+	
+	// LDAP密码始终从环境变量读取以避免YAML特殊字符解析问题和提高安全性
+	// LDAP password is always read from environment variable to avoid YAML special character parsing issues and for security.
+	if envPassword := os.Getenv("LDAP_BIND_PASSWORD"); envPassword != "" {
+		cfg.LdapBindPassword = envPassword
+	}
+	
 	return nil
 }
 

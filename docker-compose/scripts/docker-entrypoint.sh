@@ -62,9 +62,12 @@ case "$1" in
     render /tpl/rttys.conf.tmpl /home/rttys.conf \
       RTTYS_TOKEN RTTYS_PASS \
       GLKVM_ACCESS_IP TURN_PORT TURN_USER TURN_PASS \
-      RTTYS_DEVICE_PORT RTTYS_WEBUI_PORT RTTYS_HTTP_PROXY_PORT
+      RTTYS_DEVICE_PORT RTTYS_WEBUI_PORT RTTYS_HTTP_PROXY_PORT \
+      LDAP_ENABLED LDAP_SERVER LDAP_PORT LDAP_USE_TLS \
+      LDAP_BIND_DN LDAP_BIND_PASSWORD LDAP_BASE_DN \
+      LDAP_USER_FILTER LDAP_ALLOWED_GROUPS LDAP_ALLOWED_USERS
 
-    exec rttys -c /home/rttys.conf
+    exec /usr/bin/rttys -c /home/rttys.conf
     ;;
 
   coturn)

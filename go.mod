@@ -7,6 +7,7 @@ require (
 	github.com/fanjindong/go-cache v0.0.6
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.10.1
+	github.com/go-ldap/ldap/v3 v3.4.8
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/json-iterator/go v1.1.12

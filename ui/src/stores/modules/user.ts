@@ -1,8 +1,8 @@
 /*
  * @Author: LPY
  * @Date: 2025-05-29 18:43:46
- * @LastEditors: LPY
- * @LastEditTime: 2025-08-26 09:24:09
+ * @LastEditors: CU-Jon
+ * @LastEditTime: 2025-09-26 14:02:57 EDT
  * @FilePath: \glkvm-cloud\web-ui\src\stores\modules\user.ts
  * @Description: 用户相关状态存储
  */
@@ -37,10 +37,19 @@ export const useUserStore = defineStore('user', () => {
 
     /** 登录 */
     const login = async (credentials: LoginParams) => {
-        // 加密密码
-        const params = {
+        // 准备登录参数 (Prepare login parameters)
+        const params: LoginParams = {
             password: credentials.password,
         }
+        
+        // 如果提供了用户名和认证方法则添加 (Add username and auth method if provided)
+        if (credentials.username) {
+            params.username = credentials.username
+        }
+        if (credentials.authMethod) {
+            params.authMethod = credentials.authMethod
+        }
+        
         const data = await reqLogin(params)
         console.log(data.info)
         loginStatus.value = true
@@ -74,6 +83,8 @@ export const useUserStore = defineStore('user', () => {
             logout()
         } catch (error) {
             console.log(error)
+            // 即使退出请求失败也继续本地退出 (Continue local logout even if logout request fails)
+            logout()
         }
     }
 

@@ -119,6 +119,48 @@ func main() {
 				Name:  "allow-origins",
 				Usage: "allow all origins for cross-domain request",
 			},
+			&cli.BoolFlag{
+				Name:  "ldap-enabled",
+				Usage: "enable LDAP authentication",
+			},
+			&cli.StringFlag{
+				Name:  "ldap-server",
+				Usage: "LDAP server hostname or IP",
+			},
+			&cli.IntFlag{
+				Name:  "ldap-port",
+				Value: 389,
+				Usage: "LDAP server port",
+			},
+			&cli.BoolFlag{
+				Name:  "ldap-use-tls",
+				Usage: "use TLS/SSL for LDAP connection",
+			},
+			&cli.StringFlag{
+				Name:  "ldap-bind-dn",
+				Usage: "LDAP bind DN for service account",
+			},
+			&cli.StringFlag{
+				Name:  "ldap-bind-password",
+				Usage: "LDAP bind password for service account",
+			},
+			&cli.StringFlag{
+				Name:  "ldap-base-dn",
+				Usage: "LDAP base DN for user searches",
+			},
+			&cli.StringFlag{
+				Name:  "ldap-user-filter",
+				Value: "(uid=%s)",
+				Usage: "LDAP user filter",
+			},
+			&cli.StringFlag{
+				Name:  "ldap-allowed-groups",
+				Usage: "comma-separated list of allowed LDAP groups",
+			},
+			&cli.StringFlag{
+				Name:  "ldap-allowed-users",
+				Usage: "comma-separated list of allowed LDAP users",
+			},
 			&cli.StringFlag{
 				Name:  "pprof",
 				Usage: "enable pprof and listen on specified address (e.g. localhost:6060)",

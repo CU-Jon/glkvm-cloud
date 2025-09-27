@@ -18,11 +18,16 @@
   },
   "login": {
     "authorizationRequired": "需要授权",
+    "username": "用户名",
     "password": "密码",
     "signIn": "登录",
     "enterPwdTip": "请输入密码",
     "incorrectPwd": "密码错误",
-    "signOut": "退出"
+    "notAuthorized": "未授权",
+    "signOut": "退出",
+    "authOptions": "认证方式",
+    "ldapAuth": "输入用户名和密码进行LDAP认证",
+    "webManagementAuth": "留空用户名并使用Web管理密码"
   },
   "device": {
     "devices": "设备数",

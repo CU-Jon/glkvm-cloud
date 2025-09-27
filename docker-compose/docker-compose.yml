@@ -22,6 +22,18 @@ services:
       TURN_PORT:  ${TURN_PORT:-3478}
       TURN_USER:  ${TURN_USER:-glkvmcloudwebrtcuser}
       TURN_PASS:  ${TURN_PASS:-AnotherS3cret}
+
+      # ---- LDAP Configuration ----
+      LDAP_ENABLED: ${LDAP_ENABLED:-false}
+      LDAP_SERVER: ${LDAP_SERVER:-}
+      LDAP_PORT: ${LDAP_PORT:-389}
+      LDAP_USE_TLS: ${LDAP_USE_TLS:-false}
+      LDAP_BIND_DN: ${LDAP_BIND_DN:-}
+      LDAP_BIND_PASSWORD: ${LDAP_BIND_PASSWORD:-}
+      LDAP_BASE_DN: ${LDAP_BASE_DN:-}
+      LDAP_USER_FILTER: ${LDAP_USER_FILTER:-(uid=%s)}
+      LDAP_ALLOWED_GROUPS: ${LDAP_ALLOWED_GROUPS:-}
+      LDAP_ALLOWED_USERS: ${LDAP_ALLOWED_USERS:-}
     volumes:
       - ./templates/rttys.conf.template:/tpl/rttys.conf.tmpl:ro
       - ./scripts/docker-entrypoint.sh:/docker-entrypoint.sh:ro

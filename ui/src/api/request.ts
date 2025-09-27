@@ -43,7 +43,7 @@ export const httpService = new HttpService(
     },
     error => {
         console.log('请求错误', error)
-        Promise.reject(error)
+        return Promise.reject(error)
     },
 )
 
