@@ -199,6 +199,9 @@ if [ "$ENV_EXISTED" = false ]; then
   echo "✅ Updated .env with generated credentials."
 else
   echo "✅ Existing .env found - preserved existing credentials, only updated GLKVM_IMAGE."
+  # Extract existing values from .env for display purposes
+  PUBLIC_IP=$(grep "^GLKVM_ACCESS_IP=" .env | cut -d'=' -f2)
+  PASSWORD=$(grep "^RTTYS_PASS=" .env | cut -d'=' -f2)
 fi
 
 # Compose up (OS-specific)
