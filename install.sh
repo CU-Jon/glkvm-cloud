@@ -151,7 +151,9 @@ echo "✅ docker-compose extracted."
 cd "$GLKVM_DIR"
 
 # Prepare .env file
+ENV_EXISTED=false
 if [ -f ".env" ]; then
+  ENV_EXISTED=true
   BACKUP_DATE=$(date +"%Y%m%d_%H%M%S")
   cp .env ".env_${BACKUP_DATE}.backup"
   echo "⚠️  .env already exists; created backup as .env_${BACKUP_DATE}.backup"
@@ -179,18 +181,25 @@ fi
 echo "Detected public IP: $PUBLIC_IP"
 
 generate_random_string() { tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32; }
-TOKEN=$(generate_random_string)
-PASSWORD=$(generate_random_string)
-WEBRTC_USERNAME=$(generate_random_string)
-WEBRTC_PASSWORD=$(generate_random_string)
 
-# Update .env with generated values
-sed -i "s|^RTTYS_TOKEN=.*|RTTYS_TOKEN=$TOKEN|" .env
-sed -i "s|^RTTYS_PASS=.*|RTTYS_PASS=$PASSWORD|" .env
-sed -i "s|^TURN_USER=.*|TURN_USER=$WEBRTC_USERNAME|" .env
-sed -i "s|^TURN_PASS=.*|TURN_PASS=$WEBRTC_PASSWORD|" .env
-sed -i "s|^GLKVM_ACCESS_IP=.*|GLKVM_ACCESS_IP=$PUBLIC_IP|" .env
-echo "✅ Updated .env with generated credentials."
+# Only update credentials if .env was newly created (not if it existed before)
+if [ "$ENV_EXISTED" = false ]; then
+  echo "Generating new credentials for fresh .env file..."
+  TOKEN=$(generate_random_string)
+  PASSWORD=$(generate_random_string)
+  WEBRTC_USERNAME=$(generate_random_string)
+  WEBRTC_PASSWORD=$(generate_random_string)
+
+  # Update .env with generated values
+  sed -i "s|^RTTYS_TOKEN=.*|RTTYS_TOKEN=$TOKEN|" .env
+  sed -i "s|^RTTYS_PASS=.*|RTTYS_PASS=$PASSWORD|" .env
+  sed -i "s|^TURN_USER=.*|TURN_USER=$WEBRTC_USERNAME|" .env
+  sed -i "s|^TURN_PASS=.*|TURN_PASS=$WEBRTC_PASSWORD|" .env
+  sed -i "s|^GLKVM_ACCESS_IP=.*|GLKVM_ACCESS_IP=$PUBLIC_IP|" .env
+  echo "✅ Updated .env with generated credentials."
+else
+  echo "✅ Existing .env found - preserved existing credentials, only updated GLKVM_IMAGE."
+fi
 
 # Compose up (OS-specific)
 if [ "$PLATFORM" = "debian" ]; then
