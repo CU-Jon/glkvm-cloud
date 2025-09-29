@@ -41,10 +41,10 @@ jobs:
           # Both yarn and npm (your build.sh may use either)
           sudo apt-get install -y yarnpkg npm
 
-      - name: Run build.sh (produces 3 release artifacts)
+      - name: Run build-docker-release.sh (produces 3 release artifacts)
         run: |
-          chmod +x ./build.sh
-          ./build.sh
+          chmod +x ./build-docker-release.sh
+          ./build-docker-release.sh
 
       - name: Verify artifacts exist
         run: |
