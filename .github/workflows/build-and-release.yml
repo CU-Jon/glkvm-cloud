@@ -1,0 +1,64 @@
+name: Build & Release (LDAP)
+
+on:
+  push:
+    branches:
+      - feature/CU-Jon_LDAP
+  workflow_dispatch:
+
+permissions:
+  contents: write  # required to create releases & upload assets
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    env:
+      # Release tag prefix used by install.sh to filter "latest" for THIS branch
+      TAG_PREFIX: glkvm-cloud-ldap
+      TAG_NAME: glkvm-cloud-ldap-${{ github.run_number }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install build prerequisites
+        run: |
+          sudo apt-get update
+          # Both yarn and npm (your build.sh may use either)
+          sudo apt-get install -y yarnpkg npm
+
+      - name: Run build.sh (produces 3 release artifacts)
+        run: |
+          chmod +x ./build.sh
+          ./build.sh
+
+      - name: Verify artifacts exist
+        run: |
+          ls -lh glkvm-cloud-custom.tar glkvm-coturn.tar docker-compose.tar.gz
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          name: "GLKVM Cloud (LDAP)"
+          prerelease: false
+          files: |
+            glkvm-cloud-custom.tar
+            glkvm-coturn.tar
+            docker-compose.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
