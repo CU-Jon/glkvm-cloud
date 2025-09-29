@@ -10,7 +10,7 @@ REPO="glkvm-cloud"
 TAG_PREFIX="${TAG_PREFIX:-glkvm-cloud-ldap}"
 
 # Asset names produced by build.sh (do not change unless build.sh changes)
-ASSET_APP="glkvm-cloud-custom.tar"
+ASSET_APP="glkvm-cloud-ldap.tar"
 ASSET_TURN="glkvm-coturn.tar"
 ASSET_COMPOSE="docker-compose.tar.gz"
 # =======================================
@@ -152,11 +152,17 @@ cd "$GLKVM_DIR"
 
 # Prepare .env file
 if [ -f ".env" ]; then
-  echo "⚠️  .env already exists; leaving it as-is."
+  BACKUP_DATE=$(date +"%Y%m%d_%H%M%S")
+  cp .env ".env_${BACKUP_DATE}.backup"
+  echo "⚠️  .env already exists; created backup as .env_${BACKUP_DATE}.backup"
 else
   cp .env.example .env
   echo "✅ Created .env from .env.example"
 fi
+
+# Update GLKVM_IMAGE in .env file
+sed -i "s|^GLKVM_IMAGE=.*|GLKVM_IMAGE=glkvm-cloud-ldap:latest|" .env
+echo "✅ Updated GLKVM_IMAGE to use LDAP image."
 
 # Public IP helper
 get_public_ip() {

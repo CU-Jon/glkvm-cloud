@@ -68,21 +68,21 @@ echo "✅ rttys binary verified"
 
 # Build the Docker image
 echo "Building Docker image..."
-docker build -t glkvm-cloud-custom:latest .
+docker build -t glkvm-cloud-ldap:latest .
 
 # Verify the binary is in the image
 echo "Verifying rttys binary in Docker image..."
-docker run --rm --entrypoint /bin/sh glkvm-cloud-custom:latest -c "ls -la /usr/bin/rttys" || {
+docker run --rm --entrypoint /bin/sh glkvm-cloud-ldap:latest -c "ls -la /usr/bin/rttys" || {
     echo "❌ rttys binary not found in Docker image!"
     echo "Debugging Docker build..."
-    docker run --rm --entrypoint /bin/sh glkvm-cloud-custom:latest -c "ls -la /usr/bin/"
-    docker run --rm --entrypoint /bin/sh glkvm-cloud-custom:latest -c "find / -name '*rttys*' 2>/dev/null || echo 'No rttys found'"
+    docker run --rm --entrypoint /bin/sh glkvm-cloud-ldap:latest -c "ls -la /usr/bin/"
+    docker run --rm --entrypoint /bin/sh glkvm-cloud-ldap:latest -c "find / -name '*rttys*' 2>/dev/null || echo 'No rttys found'"
     exit 1
 }
 
 # Export the Docker image
 echo "Exporting Docker image..."
-docker save -o glkvm-cloud-custom.tar glkvm-cloud-custom:latest
+docker save -o glkvm-cloud-ldap.tar glkvm-cloud-ldap:latest
 
 # Download coturn image and export it
 echo "Pulling and exporting coturn image..."
@@ -114,8 +114,7 @@ tar -czf ../docker-compose.tar.gz .
 cd ..
 
 echo "✅ Build complete! Generated files:"
-echo "  - glkvm-cloud-custom.tar (main application image)"
+echo "  - glkvm-cloud-ldap.tar (main application image)"
 echo "  - glkvm-coturn.tar (coturn TURN server image)" 
 echo "  - docker-compose.tar.gz (docker-compose configuration)"
 echo ""
-echo "Copy these files along with install-custom.sh to your target machine."

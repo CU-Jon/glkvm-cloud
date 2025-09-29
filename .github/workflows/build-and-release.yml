@@ -48,7 +48,7 @@ jobs:
 
       - name: Verify artifacts exist
         run: |
-          ls -lh glkvm-cloud-custom.tar glkvm-coturn.tar docker-compose.tar.gz
+          ls -lh glkvm-cloud-ldap.tar glkvm-coturn.tar docker-compose.tar.gz
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -57,7 +57,7 @@ jobs:
           name: "GLKVM Cloud (LDAP)"
           prerelease: false
           files: |
-            glkvm-cloud-custom.tar
+            glkvm-cloud-ldap.tar
             glkvm-coturn.tar
             docker-compose.tar.gz
         env:
