@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
+#!/bin/bash
 echo "GLKVM cloud is building..."
 
 # ========= Config you can tweak =========
